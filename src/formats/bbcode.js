@@ -251,8 +251,14 @@
 				// 401 is for FF 3.5
 				'font-weight': ['bold', 'bolder', '401', '700', '800', '900']
 			},
-			format: '[b]{0}[/b]',
-			html: '<strong>{0}</strong>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[b guid=${_filterGuidString(guid_val)}]`+content + `[/b]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<strong data-guid="${guid_val}" >${content}</strong>`;
+			}
 		},
 		// END_COMMAND
 
@@ -265,8 +271,14 @@
 			styles: {
 				'font-style': ['italic', 'oblique']
 			},
-			format: '[i]{0}[/i]',
-			html: '<em>{0}</em>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[i guid=${_filterGuidString(guid_val)}]`+content + `[/i]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<em data-guid="${guid_val}" >${content}</em>`;
+			}
 		},
 		// END_COMMAND
 
@@ -278,8 +290,14 @@
 			styles: {
 				'text-decoration': ['underline']
 			},
-			format: '[u]{0}[/u]',
-			html: '<u>{0}</u>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[u guid=${_filterGuidString(guid_val)}]`+content + `[/u]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<u data-guid="${guid_val}" >${content}</u>`;
+			}
 		},
 		// END_COMMAND
 
@@ -292,8 +310,14 @@
 			styles: {
 				'text-decoration': ['line-through']
 			},
-			format: '[s]{0}[/s]',
-			html: '<s>{0}</s>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[s guid=${_filterGuidString(guid_val)}]`+content + `[/s]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<s data-guid="${guid_val}" >${content}</s>`;
+			}
 		},
 		// END_COMMAND
 
@@ -302,8 +326,14 @@
 			tags: {
 				sub: null
 			},
-			format: '[sub]{0}[/sub]',
-			html: '<sub>{0}</sub>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[sub guid=${_filterGuidString(guid_val)}]`+content + `[/sub]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<sub data-guid="${guid_val}" >${content}</sub>`;
+			}
 		},
 		// END_COMMAND
 
@@ -312,8 +342,14 @@
 			tags: {
 				sup: null
 			},
-			format: '[sup]{0}[/sup]',
-			html: '<sup>{0}</sup>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[sup guid=${_filterGuidString(guid_val)}]`+content + `[/sup]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<sup data-guid="${guid_val}" >${content}</sup>`;
+			}
 		},
 		// END_COMMAND
 
@@ -335,10 +371,16 @@
 					font = css(element, 'font-family');
 				}
 
-				return '[font=' + _stripQuotes(font) + ']' +
+				let guid_val = element.getAttribute('data-guid')??'';
+
+				return '[font=' + _stripQuotes(font) +` guid=${_filterGuidString(guid_val)}` +']' +
 					content + '[/font]';
 			},
-			html: '<font face="{defaultattr}">{0}</font>'
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				let default_val = (  attrs.hasOwnProperty('defaultattr') && attrs.defaultattr)? attrs.defaultattr : '';
+				return `<font data-guid="${guid_val}" face="${default_val}" >${content}</font>`;
+			}
 		},
 		// END_COMMAND
 
@@ -386,10 +428,14 @@
 				} else {
 					size = fontSize;
 				}
-
-				return '[size=' + size + ']' + content + '[/size]';
+				let guid_val = element.getAttribute('data-guid')??'';
+				return '[size=' + size + ` guid=${_filterGuidString(guid_val)}` +']' + content + '[/size]';
 			},
-			html: '<font size="{defaultattr}">{!0}</font>'
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				let default_val = (  attrs.hasOwnProperty('defaultattr') && attrs.defaultattr)? attrs.defaultattr : '';
+				return `<font data-guid="${guid_val}" size="${default_val}" >${content}</font>`;
+			}
 		},
 		// END_COMMAND
 
@@ -411,13 +457,15 @@
 					color = elm.style.color || css(elm, 'color');
 				}
 
-				return '[color=' + _normaliseColour(color) + ']' +
+				let guid_val = elm.getAttribute('data-guid')??'';
+				return '[color=' + _normaliseColour(color) + ` guid=${_filterGuidString(guid_val)}` + ']' +
 					content + '[/color]';
 			},
 			html: function (token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
 				return '<font color="' +
 					escapeEntities(_normaliseColour(attrs.defaultattr), true) +
-					'">' + content + '</font>';
+					'"'+ ` data-guid="${guid_val}" `+ '>' + content + '</font>';
 			}
 		},
 		// END_COMMAND
@@ -430,14 +478,23 @@
 			breakStart: true,
 			isInline: false,
 			skipLastLineBreak: true,
-			format: '[ul]{0}[/ul]',
-			html: '<ul>{0}</ul>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[ul guid=${_filterGuidString(guid_val)}]`+content + `[/ul]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<ul data-guid="${guid_val}" >${content}</ul>`;
+			}
 		},
 		list: {
 			breakStart: true,
 			isInline: false,
 			skipLastLineBreak: true,
-			html: '<ul>{0}</ul>'
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<ul data-guid="${guid_val}" >${content}</ul>`;
+			}
 		},
 		ol: {
 			tags: {
@@ -446,8 +503,14 @@
 			breakStart: true,
 			isInline: false,
 			skipLastLineBreak: true,
-			format: '[ol]{0}[/ol]',
-			html: '<ol>{0}</ol>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[ol guid=${_filterGuidString(guid_val)}]`+content + `[/ol]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<ol data-guid="${guid_val}" >${content}</ol>`;
+			}
 		},
 		li: {
 			tags: {
@@ -455,13 +518,22 @@
 			},
 			isInline: false,
 			closedBy: ['/ul', '/ol', '/list', '*', 'li'],
-			format: '[li]{0}[/li]',
-			html: '<li>{0}</li>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[li guid=${_filterGuidString(guid_val)}]`+content + `[/li]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<li data-guid="${guid_val}" >${content}</li>`;
+			}
 		},
 		'*': {
 			isInline: false,
 			closedBy: ['/ul', '/ol', '/list', '*', 'li'],
-			html: '<li>{0}</li>'
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<li data-guid="${guid_val}" >${content}</li>`;
+			}
 		},
 		// END_COMMAND
 
@@ -473,8 +545,14 @@
 			isInline: false,
 			isHtmlInline: true,
 			skipLastLineBreak: true,
-			format: '[table]{0}[/table]',
-			html: '<table>{0}</table>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[table guid=${_filterGuidString(guid_val)}]`+content + `[/table]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<table data-guid="${guid_val}" >${content}</table>`;
+			}
 		},
 		tr: {
 			tags: {
@@ -482,8 +560,14 @@
 			},
 			isInline: false,
 			skipLastLineBreak: true,
-			format: '[tr]{0}[/tr]',
-			html: '<tr>{0}</tr>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[tr guid=${_filterGuidString(guid_val)}]`+content + `[/tr]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<tr data-guid="${guid_val}" >${content}</tr>`;
+			}
 		},
 		th: {
 			tags: {
@@ -491,8 +575,14 @@
 			},
 			allowsEmpty: true,
 			isInline: false,
-			format: '[th]{0}[/th]',
-			html: '<th>{0}</th>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[th guid=${_filterGuidString(guid_val)}]`+content + `[/th]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<th data-guid="${guid_val}" >${content}</th>`;
+			}
 		},
 		td: {
 			tags: {
@@ -500,8 +590,14 @@
 			},
 			allowsEmpty: true,
 			isInline: false,
-			format: '[td]{0}[/td]',
-			html: '<td>{0}</td>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[td guid=${_filterGuidString(guid_val)}]`+content + `[/td]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<td data-guid="${guid_val}" >${content}</td>`;
+			}
 		},
 		// END_COMMAND
 
@@ -529,8 +625,14 @@
 			allowsEmpty: true,
 			isSelfClosing: true,
 			isInline: false,
-			format: '[hr]{0}',
-			html: '<hr />'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[hr guid=${_filterGuidString(guid_val)}]`+content;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<hr data-guid="${guid_val}" />`;
+			}
 		},
 		// END_COMMAND
 
@@ -567,7 +669,9 @@
 						dom.height(element);
 				}
 
-				return '[img' + attribs + ']' + attr(element, 'src') + '[/img]';
+				let guid_val = element.getAttribute('data-guid')??'';
+
+				return '[img' + attribs + `guid=${_filterGuidString(guid_val)}` +']' + attr(element, 'src') + '[/img]';
 			},
 			html: function (token, attrs, content) {
 				var	undef, width, height, match,
@@ -592,9 +696,9 @@
 				if (height !== undef) {
 					attribs += ' height="' + escapeEntities(height, true) + '"';
 				}
-
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
 				return '<img' + attribs +
-					' src="' + escapeUriScheme(content) + '" />';
+					' src="' + escapeUriScheme(content) + '"' + ` data-guid="${guid_val}" `+ '/>';
 			}
 		},
 		// END_COMMAND
@@ -610,21 +714,22 @@
 			quoteType: QuoteType.never,
 			format: function (element, content) {
 				var url = attr(element, 'href');
-
+				let guid_val = element.getAttribute('data-guid')??'';
 				// make sure this link is not an e-mail,
 				// if it is return e-mail BBCode
 				if (url.substr(0, 7) === 'mailto:') {
-					return '[email="' + url.substr(7) + '"]' +
+					return '[email="' + url.substr(7) + '"' +` guid=${_filterGuidString(guid_val)}` + ']' +
 						content + '[/email]';
 				}
 
-				return '[url=' + url + ']' + content + '[/url]';
+				return '[url=' + url +  ` guid=${_filterGuidString(guid_val)}` +  ']' + content + '[/url]';
 			},
 			html: function (token, attrs, content) {
 				attrs.defaultattr =
 					escapeEntities(attrs.defaultattr, true) || content;
 
-				return '<a href="' + escapeUriScheme(attrs.defaultattr) + '">' +
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return '<a href="' + escapeUriScheme(attrs.defaultattr) + '"'+ ` data-guid="${guid_val}" `+'>' +
 					content + '</a>';
 			}
 		},
@@ -634,9 +739,10 @@
 		email: {
 			quoteType: QuoteType.never,
 			html: function (token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
 				return '<a href="mailto:' +
 					(escapeEntities(attrs.defaultattr, true) || content) +
-					'">' + content + '</a>';
+					'"'  + ` data-guid="${guid_val}" `+ '>' + content + '</a>';
 			}
 		},
 		// END_COMMAND
@@ -677,16 +783,16 @@
 						element.insertBefore(cite, element.firstChild);
 					}
 				}
-
-				return '[quote' + author + ']' + content + '[/quote]';
+				let guid_val = element.getAttribute('data-guid')??'';
+				return '[quote' + author + ` guid=${_filterGuidString(guid_val)}` +']' + content + '[/quote]';
 			},
 			html: function (token, attrs, content) {
 				if (attrs.defaultattr) {
 					content = '<cite>' + escapeEntities(attrs.defaultattr) +
 						'</cite>' + content;
 				}
-
-				return '<blockquote>' + content + '</blockquote>';
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return '<blockquote '+ ` data-guid="${guid_val}" `+'>' + content + '</blockquote>';
 			}
 		},
 		// END_COMMAND
@@ -698,8 +804,14 @@
 			},
 			isInline: false,
 			allowedChildren: ['#', '#newline'],
-			format: '[code]{0}[/code]',
-			html: '<code>{0}</code>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[code guid=${_filterGuidString(guid_val)}]`+content + `[/code]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<code data-guid="${guid_val}" >${content}</code>`;
+			}
 		},
 		// END_COMMAND
 
@@ -716,8 +828,14 @@
 			},
 			isInline: false,
 			allowsEmpty: true,
-			format: '[left]{0}[/left]',
-			html: '<div align="left">{0}</div>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[left guid=${_filterGuidString(guid_val)}]`+content + `[/left]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<div align="left" data-guid="${guid_val}" >${content}</div>`;
+			}
 		},
 		// END_COMMAND
 
@@ -733,8 +851,14 @@
 			},
 			isInline: false,
 			allowsEmpty: true,
-			format: '[center]{0}[/center]',
-			html: '<div align="center">{0}</div>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[center guid=${_filterGuidString(guid_val)}]`+content + `[/center]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<div align="center" data-guid="${guid_val}" >${content}</div>`;
+			}
 		},
 		// END_COMMAND
 
@@ -750,8 +874,14 @@
 			},
 			isInline: false,
 			allowsEmpty: true,
-			format: '[right]{0}[/right]',
-			html: '<div align="right">{0}</div>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[right guid=${_filterGuidString(guid_val)}]`+content + `[/right]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<div align="right" data-guid="${guid_val}" >${content}</div>`;
+			}
 		},
 		// END_COMMAND
 
@@ -767,8 +897,14 @@
 			},
 			isInline: false,
 			allowsEmpty: true,
-			format: '[justify]{0}[/justify]',
-			html: '<div align="justify">{0}</div>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[justify guid=${_filterGuidString(guid_val)}]`+content + `[/justify]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<div align="justify" data-guid="${guid_val}" >${content}</div>`;
+			}
 		},
 		// END_COMMAND
 
@@ -781,13 +917,19 @@
 				}
 			},
 			format: function (element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
 				element = attr(element, 'data-youtube-id');
-
-				return element ? '[youtube]' + element + '[/youtube]' : content;
+				return element ? `[youtube guid=${_filterGuidString(guid_val)}]` + element + '[/youtube]' : content;
 			},
-			html: '<iframe width="560" height="315" frameborder="0" ' +
-				'src="https://www.youtube-nocookie.com/embed/{0}?wmode=opaque" ' +
-				'data-youtube-id="{0}" allowfullscreen></iframe>'
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				let out =  `<iframe width="560" height="315" frameborder="0" `+
+				`src="https://www.youtube-nocookie.com/embed/${content}?wmode=opaque" ` +
+				`data-youtube-id="${content}" allowfullscreen  data-guid="${guid_val}" ></iframe>`;
+				console.debug("out was ", out);
+				return out;
+			}
+			
 		},
 		// END_COMMAND
 
@@ -798,8 +940,15 @@
 				direction: ['rtl']
 			},
 			isInline: false,
-			format: '[rtl]{0}[/rtl]',
-			html: '<div style="direction: rtl">{0}</div>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[rtl guid=${_filterGuidString(guid_val)}]`+content + `[/rtl]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<div style="direction: rtl" data-guid="${guid_val}" >${content}</div>`;
+			}
+
 		},
 		// END_COMMAND
 
@@ -809,8 +958,14 @@
 				direction: ['ltr']
 			},
 			isInline: false,
-			format: '[ltr]{0}[/ltr]',
-			html: '<div style="direction: ltr">{0}</div>'
+			format: function(element, content) {
+				let guid_val = element.getAttribute('data-guid')??'';
+				return `[ltr guid=${_filterGuidString(guid_val)}]`+content + `[/ltr]`;
+			},
+			html: function(token, attrs, content) {
+				let guid_val = (  attrs.hasOwnProperty('guid') && attrs.guid)? _filterGuidString(attrs.guid) : '';
+				return `<div style="direction: ltr" data-guid="${guid_val}" >${content}</div>`;
+			}
 		},
 		// END_COMMAND
 
@@ -2218,6 +2373,22 @@
 		}
 
 		return colorStr;
+	}
+
+	/**
+	 * @author will@hexbatch.com
+	 * @param guid_string
+	 * @return {string}
+	 * @private
+	 */
+	function _filterGuidString(guid_string) {
+		if (!guid_string) {return '';}
+		let pattern = /^[\da-f]{32}$/i;
+		if (pattern.test(guid_string)) {
+			return guid_string;
+		}
+		console.warn("Bad guid",guid_string);
+		return '';
 	}
 
 	/**
