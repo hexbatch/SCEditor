@@ -671,7 +671,7 @@
 
 				let guid_val = element.getAttribute('data-guid')??'';
 
-				return '[img' + attribs + `guid=${_filterGuidString(guid_val)}` +']' + attr(element, 'src') + '[/img]';
+				return '[img' + attribs + ` guid=${_filterGuidString(guid_val)}` +']' + attr(element, 'src') + '[/img]';
 			},
 			html: function (token, attrs, content) {
 				var	undef, width, height, match,
